@@ -7,9 +7,6 @@ def load_yaml(path: str) -> dict:
 
 
 def require(cfg: dict, keypath: str):
-    """
-    keypath: "train.lr" のようにドット区切り
-    """
     cur = cfg
     for k in keypath.split("."):
         if not isinstance(cur, dict) or k not in cur:
