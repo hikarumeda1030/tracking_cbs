@@ -70,7 +70,17 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
 
     lr = config.require(cfg, "train.lr")
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+    beta1 = config.optional(cfg, "train.adam_beta1", 0.9)
+    beta2 = config.optional(cfg, "train.adam_beta2", 0.999)
+    eps = config.optional(cfg, "train.adam_eps", 1e-8)
+    weight_decay = config.optional(cfg, "train.adam_weight_decay", 0.0)
+    optimizer = torch.optim.Adam(
+        model.parameters(),
+        lr=lr,
+        betas=(beta1, beta2),
+        eps=eps,
+        weight_decay=weight_decay,
+    )
     lr_sched_type = config.optional(cfg, "train.lr_scheduler")
     lr_sched = lr_scheduler(optimizer, cfg)
 

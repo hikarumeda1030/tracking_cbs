@@ -52,17 +52,18 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
     """
-    dataset_mode: 'cifar' or 'imagenet'
-      - 'cifar'    : stem = 3x3 s1, no maxpool（32x32 向け）
-      - 'imagenet' : stem = 7x7 s2 + maxpool s2（224x224 向け）
+    dataset_mode: 'cifar', 'tiny_imagenet', or 'imagenet'
+      - 'cifar'         : stem = 3x3 s1, no maxpool（32x32 向け）
+      - 'tiny_imagenet' : stem = 3x3 s1, no maxpool（64x64 向け）
+      - 'imagenet'      : stem = 7x7 s2 + maxpool s2（224x224 向け）
     """
     def __init__(self, block, num_block, num_classes=100, dataset_mode: str = 'cifar'):
         super().__init__()
-        assert dataset_mode in ['cifar', 'imagenet']
+        assert dataset_mode in ['cifar', 'tiny_imagenet', 'imagenet']
         self.in_channels = 64
 
         # --- stem ---
-        if dataset_mode == 'cifar':
+        if dataset_mode in ('cifar', 'tiny_imagenet'):
             self.conv1 = nn.Sequential(
                 nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False),
                 nn.BatchNorm2d(64),
